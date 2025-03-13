@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace App_Consultorio.Domain.Enums
+{
+    public enum ExpensesTypes
+    {
+        PagoMedico,
+        Alquiler,
+        Luz,
+        Gas,
+        Internet,
+        Otros
+
+    }
+}

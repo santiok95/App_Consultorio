@@ -1,0 +1,73 @@
+﻿@page "/doctors/create"
+
+@inject IMediator Mediator
+<PageTitle>Crear Doctor</PageTitle>
+
+
+<h3>Agregar Médico</h3>
+
+<EditForm Model="doctorViewModel" OnValidSubmit="HandleSubmit" FormName="createDoctorForm">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label for="applicationUserId">ID de Usuario</label>
+        <InputText id="applicationUserId" class="form-control" @bind-Value="doctorViewModel.ApplicationUserId" required />
+    </div>
+
+    <div class="mb-3">
+        <label for="medicalSpecialties">Especialidad Médica</label>
+        <InputSelect id="medicalSpecialties" class="form-control" @bind-Value="doctorViewModel.MedicalSpecialties">
+            @foreach (var specialty in Enum.GetValues(typeof(MedicalSpecialties)))
+            {
+                <option value="@specialty">@specialty</option>
+            }
+        </InputSelect>
+    </div>
+
+    <div class="mb-3">
+        <label for="licenseNumber">Número de Matrícula</label>
+        <InputText id="licenseNumber" class="form-control" @bind-Value="doctorViewModel.LicenseNumber" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+</EditForm>
+
+@if (!string.IsNullOrEmpty(message))
+{
+    <div class="alert alert-danger mt-3">@message</div>
+}
+
+@if (!string.IsNullOrEmpty(successMessage))
+{
+    <div class="alert alert-success mt-3">@successMessage</div>
+}
+
+@code {
+    // ViewModel para el binding en la UI (con propiedades mutables y un constructor por defecto)
+    private DoctorViewModel doctorViewModel = new DoctorViewModel();
+    private string? message;
+    private string? successMessage;
+
+    // Al enviar el formulario, se mapean los datos del ViewModel a CreateDoctorRequest y se envía con MediatR
+    private async Task HandleSubmit()
+    {
+
+
+        // Enviar el comando a través de MediatR
+        var result = await Mediator.Send(new CreateDoctorRequest(doctorViewModel.ApplicationUserId,
+            doctorViewModel.MedicalSpecialties,
+            doctorViewModel.LicenseNumber));
+
+       
+    }
+
+    // ViewModel para la pantalla de creación
+    public class DoctorViewModel
+    {
+        public string ApplicationUserId { get; set; } = string.Empty;
+        // Asigna un valor por defecto (si tu enum no tiene un valor 'Default', usa el primer valor o crea uno)
+        public MedicalSpecialties MedicalSpecialties { get; set; } = MedicalSpecialties.None;
+        public string? LicenseNumber { get; set; }
+    }
+}
