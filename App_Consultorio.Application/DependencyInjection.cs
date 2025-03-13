@@ -1,5 +1,4 @@
-﻿using App_Consultorio.Application.Features.Doctor.CreateDoctors;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +14,9 @@ namespace App_Consultorio.Application
             services.AddMediatR(o =>
             {
                 o.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly);
-                o.RegisterServicesFromAssembly(typeof(CreateDoctorRequestHandler).Assembly);
             });
+
+
             return services;
         }
     }
