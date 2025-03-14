@@ -6,6 +6,8 @@ using App_Consultorio.Web.Components;
 using App_Consultorio.Web.Components.Account;
 using App_Consultorio.Domain.Entities;
 using App_Consultorio.Application;
+using App_Consultorio.Application.Features.Doctor.CreateDoctors;
+using App_Consultorio.Application.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,14 +31,19 @@ builder.Services.AddAuthentication(options =>
     })
     .AddIdentityCookies();
 
-builder.Services.AddDbContext<App_Consultorio.Data.AppDbContext>(options =>
+builder.Services.AddDbContext<IApplicationContext, App_Consultorio.Data.AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
 builder.Services.AddIdentityCore<App_Consultorio.Domain.Entities.ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<App_Consultorio.Data.AppDbContext>()
     .AddSignInManager()
     .AddDefaultTokenProviders();
 
 builder.Services.AddSingleton<IEmailSender<App_Consultorio.Domain.Entities.ApplicationUser>, IdentityNoOpEmailSender>();
+builder.Services.AddMediatR(cfg =>
+    cfg.RegisterServicesFromAssembly(typeof(CreateDoctorRequestHandler).Assembly));
+
 
 var app = builder.Build();
 

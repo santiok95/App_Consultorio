@@ -12,7 +12,6 @@ builder.Services.AddAuthenticationStateDeserialization();
 builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(CreateDoctorRequestHandler).Assembly));
 
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
 builder.Services.AddApplication();
 
