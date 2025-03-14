@@ -22,18 +22,11 @@ namespace App_Consultorio.Application.Features.Doctor.CreateDoctors
 
         public async Task<Result> Handle(CreateDoctorRequest request, CancellationToken cancellationToken)
         {
-
-            var existingDoctor = await _context.Doctors
-                .Where(x => x.LicenseNumber != null && x.LicenseNumber.Equals(request.LicenseNumber, StringComparison.OrdinalIgnoreCase)
-                     || x.ApplicationUserId == request.ApplicationUserId)
-                .FirstOrDefaultAsync();
-
-            if (existingDoctor != null)
+            var userExists = await _context.Users
+                .AnyAsync(u => u.Id == request.ApplicationUserId, cancellationToken);
+            if (!userExists)
             {
-                if (existingDoctor.LicenseNumber == request.LicenseNumber)
-                    return "Ya existe un médico con esa matrícula";
-
-                return  "Ya está registrado como médico";
+               return "El usuario especificado no existe en el sistema.";
             }
 
             var doctor = new App_Consultorio.Domain.Entities.Doctor(

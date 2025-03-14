@@ -11,6 +11,7 @@ namespace App_Consultorio.Application.Data
 {
     public interface IApplicationContext
     {
+        public DbSet<ApplicationUser> Users { get; }
         public DbSet<Doctor> Doctors { get; }
         public DbSet<Income> Incomes { get; }
         public DbSet<Expenses> Expenses { get; }

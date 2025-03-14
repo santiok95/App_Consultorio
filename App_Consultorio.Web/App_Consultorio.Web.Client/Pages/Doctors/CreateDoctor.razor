@@ -1,6 +1,6 @@
 ﻿@page "/doctors/create"
 
-@inject IMediator Mediator
+@inject ISender Mediator
 <PageTitle>Crear Doctor</PageTitle>
 
 
@@ -52,9 +52,10 @@
     // Al enviar el formulario, se mapean los datos del ViewModel a CreateDoctorRequest y se envía con MediatR
     private async Task HandleSubmit()
     {
+        Console.WriteLine($"ApplicationUserId: {doctorViewModel.ApplicationUserId}");
+        Console.WriteLine($"MedicalSpecialties: {doctorViewModel.MedicalSpecialties}");
+        Console.WriteLine($"LicenseNumber: {doctorViewModel.LicenseNumber}");
 
-
-        // Enviar el comando a través de MediatR
         var result = await Mediator.Send(new CreateDoctorRequest(doctorViewModel.ApplicationUserId,
             doctorViewModel.MedicalSpecialties,
             doctorViewModel.LicenseNumber));
